@@ -12,6 +12,16 @@
 # ===----------------------------------------------------------------------=== #
 """Implements the gpu host package."""
 
+from .cuda import (
+    CUDA,
+    CUDA_MODULE,
+    CUDA_get_current_context,
+    CUcontext,
+    CUevent,
+    CUmodule,
+    CUstream,
+)
+from .hip import HIP, HIP_MODULE, hipDevice_t, hipModule_t, hipStream_t
 from .compile import get_gpu_target
 from .constant_memory_mapping import ConstantMemoryMapping
 from .device_attribute import DeviceAttribute

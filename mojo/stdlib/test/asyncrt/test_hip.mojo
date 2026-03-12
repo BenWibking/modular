@@ -13,8 +13,8 @@
 
 from asyncrt_test_utils import create_test_device_context
 from std.gpu.host import DeviceContext
-from std.gpu.host._amdgpu_hip import HIP, hipDevice_t
-from std.testing import TestSuite
+from std.gpu.host.hip import HIP, hipDevice_t, hipStream_t
+from std.testing import TestSuite, assert_raises
 
 
 fn _run_hip_context(ctx: DeviceContext) raises:
@@ -37,6 +37,15 @@ fn _run_hip_stream(ctx: DeviceContext) raises:
     print("hipStream_t: " + String(hip_stream))
 
 
+fn _run_hip_import_stream_surface(ctx: DeviceContext) raises:
+    print("-")
+    print("_run_hip_import_stream_surface()")
+
+    var hip_stream: hipStream_t = HIP(ctx.stream())
+    with assert_raises(contains="External HIP stream import is not supported"):
+        _ = ctx.import_stream(hip_stream)
+
+
 def test_hip_context() raises:
     var ctx = create_test_device_context()
     _run_hip_context(ctx)
@@ -45,6 +54,11 @@ def test_hip_context() raises:
 def test_hip_stream() raises:
     var ctx = create_test_device_context()
     _run_hip_stream(ctx)
+
+
+def test_hip_import_stream_surface() raises:
+    var ctx = create_test_device_context()
+    _run_hip_import_stream_surface(ctx)
 
 
 def main() raises:

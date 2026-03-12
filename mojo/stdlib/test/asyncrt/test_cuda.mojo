@@ -13,12 +13,13 @@
 
 from asyncrt_test_utils import create_test_device_context
 from std.gpu.host import DeviceContext, Dim
-from std.gpu.host._nvidia_cuda import (
+from std.gpu.host.cuda import (
     CUDA,
     CUcontext,
+    CUstream,
     CUDA_get_current_context,
 )
-from std.testing import TestSuite, assert_equal
+from std.testing import TestSuite, assert_equal, assert_raises
 
 
 fn _run_cuda_context(ctx: DeviceContext) raises:
@@ -83,6 +84,15 @@ fn _run_cuda_stream(ctx: DeviceContext) raises:
     stream.synchronize()
     var cuda_stream = CUDA(stream)
     print("CUstream: ", cuda_stream)
+
+
+fn _run_cuda_import_stream_surface(ctx: DeviceContext) raises:
+    print("-")
+    print("_run_cuda_import_stream_surface()")
+
+    var cuda_stream: CUstream = CUDA(ctx.stream())
+    with assert_raises(contains="External CUDA stream import is not supported"):
+        _ = ctx.import_stream(cuda_stream)
 
 
 fn _run_cuda_external_function(ctx: DeviceContext) raises:
@@ -194,6 +204,11 @@ def test_cuda_context() raises:
 def test_cuda_stream() raises:
     var ctx = create_test_device_context()
     _run_cuda_stream(ctx)
+
+
+def test_cuda_import_stream_surface() raises:
+    var ctx = create_test_device_context()
+    _run_cuda_import_stream_surface(ctx)
 
 
 def test_cuda_external_function() raises:

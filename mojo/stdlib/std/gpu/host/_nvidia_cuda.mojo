@@ -12,7 +12,6 @@
 # ===----------------------------------------------------------------------=== #
 
 from std.ffi import external_call
-from std.gpu.host import DeviceContext, DeviceFunction, DeviceStream
 from std.gpu.host.device_context import (
     _ConstCharPtr,
     _checked,
@@ -20,6 +19,9 @@ from std.gpu.host.device_context import (
     _DeviceContextPtr,
     _DeviceFunctionPtr,
     _DeviceStreamPtr,
+    DeviceContext,
+    DeviceFunction,
+    DeviceStream,
 )
 
 
